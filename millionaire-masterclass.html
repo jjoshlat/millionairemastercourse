@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Ultimate Day Trading Millionaire Masterclass</title>
+<style>
+  :root{
+    --bg-0:#05080a;
+    --bg-1:#0a1210;
+    --panel:#0e1a17;
+    --panel-2:#0c1512;
+    --line:#173229;
+    --profit:#28f0a0;
+    --profit-dim:#12ad76;
+    --loss:#ff4d5e;
+    --loss-dim:#c22f3d;
+    --gold:#ffcf5c;
+    --ink:#eafff4;
+    --ink-dim:#9fc4b8;
+    --ink-faint:#5f8378;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at 15% -10%, rgba(40,240,160,0.10), transparent 45%),
+      radial-gradient(ellipse at 100% 0%, rgba(255,77,94,0.08), transparent 40%),
+      var(--bg-0);
+    color:var(--ink);
+    font-family: 'Courier New', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  @font-face{
+    font-family: 'Impactish';
+    src: local('Arial Black');
+  }
+  .display{
+    font-family: 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
+    font-weight:900;
+    letter-spacing:-0.01em;
+  }
+
+  /* ---------- ticker tape ---------- */
+  .ticker-wrap{
+    width:100%;
+    background:#000;
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+    white-space:nowrap;
+    padding:7px 0;
+    position:sticky;
+    top:0;
+    z-index:50;
+  }
+  .ticker{
+    display:inline-block;
+    padding-left:100%;
+    animation:ticker 28s linear infinite;
+    font-size:13px;
+    letter-spacing:0.03em;
+  }
+  .ticker span{margin-right:2.4em;}
+  .up{color:var(--profit);}
+  .down{color:var(--loss);}
+  @keyframes ticker{
+    0%{transform:translateX(0);}
+    100%{transform:translateX(-100%);}
+  }
+
+  /* ---------- layout ---------- */
+  .wrap{
+    display:grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap:0;
+    max-width:1440px;
+    margin:0 auto;
+    min-height:calc(100vh - 34px);
+  }
+  @media (max-width: 980px){
+    .wrap{grid-template-columns: 1fr;}
+  }
+
+  .left{
+    padding:56px 48px 80px;
+    position:relative;
+  }
+  .right{
+    padding:56px 40px 80px;
+    border-left:1px solid var(--line);
+    background:
+      linear-gradient(180deg, rgba(40,240,160,0.03), transparent 20%),
+      var(--bg-1);
+  }
+  @media (max-width: 980px){
+    .right{border-left:none; border-top:1px solid var(--line);}
+    .left,.right{padding:36px 20px 56px;}
+  }
+
+  /* ---------- hero ---------- */
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(40,240,160,0.08);
+    border:1px solid var(--profit-dim);
+    color:var(--profit);
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    padding:6px 12px;
+    border-radius:999px;
+    margin-bottom:22px;
+  }
+  .eyebrow .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--profit);
+    box-shadow:0 0 8px 2px var(--profit);
+    animation:pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1;}
+    50%{opacity:0.35;}
+  }
+
+  h1.title{
+    font-size:clamp(38px, 5.2vw, 66px);
+    line-height:0.98;
+    margin:0 0 18px;
+    text-transform:uppercase;
+    background:linear-gradient(180deg, #ffffff 0%, var(--profit) 120%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    text-shadow: 0 0 60px rgba(40,240,160,0.25);
+  }
+  .subtitle{
+    font-family:Georgia, 'Times New Roman', serif;
+    font-style:italic;
+    font-size:clamp(17px,2vw,22px);
+    color:var(--ink-dim);
+    max-width:56ch;
+    margin:0 0 28px;
+    line-height:1.5;
+  }
+
+  .stats-row{
+    display:flex;
+    gap:26px;
+    flex-wrap:wrap;
+    margin:0 0 34px;
+    font-size:14px;
+    color:var(--ink-dim);
+  }
+  .stats-row strong{
+    color:var(--gold);
+    font-family: 'Arial Black', sans-serif;
+  }
+  .stars{color:var(--gold); letter-spacing:2px;}
+
+  .copy-block p{
+    color:var(--ink-dim);
+    line-height:1.7;
+    max-width:62ch;
+    font-size:15px;
+  }
+  .copy-block ul{
+    list-style:none;
+    padding:0;
+    margin:18px 0 32px;
+    display:grid;
+    gap:10px;
+  }
+  .copy-block li{
+    font-size:15px;
+    color:var(--ink);
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+  }
+  .copy-block li::before{
+    content:"▲";
+    color:var(--profit);
+    font-size:11px;
+    margin-top:4px;
+  }
+
+  /* ---------- chart signature element ---------- */
+  .chart-panel{
+    position:relative;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:20px 20px 10px;
+    margin:8px 0 40px;
+    box-shadow: 0 0 0 1px rgba(40,240,160,0.03), 0 30px 60px -30px rgba(0,0,0,0.8);
+    overflow:hidden;
+  }
+  .chart-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:10px;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .chart-head .sym{
+    font-family:'Arial Black',sans-serif;
+    font-size:16px;
+    letter-spacing:0.04em;
+  }
+  .chart-head .price{
+    font-size:22px;
+    color:var(--profit);
+    font-family:'Arial Black',sans-serif;
+  }
+  .chart-head .delta{
+    font-size:13px;
+    color:var(--profit);
+    background:rgba(40,240,160,0.1);
+    padding:3px 8px;
+    border-radius:6px;
+  }
+  svg.chart-svg{display:block; width:100%; height:auto;}
+  .glow-line{filter: drop-shadow(0 0 6px rgba(40,240,160,0.65));}
+  .chart-caption{
+    font-size:11px;
+    color:var(--ink-faint);
+    text-align:right;
+    margin:6px 2px 8px;
+  }
+
+  .floating-cards{
+    position:absolute;
+    top:14px;
+    right:14px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    z-index:2;
+  }
+  .float-card{
+    background:rgba(5,10,9,0.85);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:6px 10px;
+    font-size:11px;
+    backdrop-filter: blur(4px);
+    animation: float 4.5s ease-in-out infinite;
+  }
+  .float-card.two{animation-delay:1.1s;}
+  .float-card.three{animation-delay:2.2s;}
+  @keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-6px);}
+  }
+
+  /* ---------- ethan photo card ---------- */
+  .ethan-card{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:16px;
+    margin:0 0 28px;
+  }
+  @media (max-width:560px){
+    .ethan-card{flex-direction:column; align-items:flex-start;}
+  }
+  .ethan-photo{
+    width:150px;
+    height:150px;
+    flex:0 0 auto;
+    border-radius:12px;
+    overflow:hidden;
+    border:2px solid var(--gold);
+    box-shadow:0 0 24px -6px rgba(255,207,92,0.5);
+    position:relative;
+    background:#050a08;
+  }
+  .ethan-photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .ethan-placeholder{
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    text-align:center;
+    padding:8px;
+    color:var(--ink-faint);
+  }
+  .ethan-emoji{
+    font-size:34px;
+    line-height:1;
+  }
+  .ethan-placeholder-text{
+    font-size:9.5px;
+    line-height:1.3;
+  }
+  .ethan-copy{flex:1 1 auto; min-width:0;}
+  .ethan-eyebrow{
+    font-size:10px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--gold);
+  }
+  .ethan-name{
+    font-family:'Arial Black',sans-serif;
+    font-size:18px;
+    margin:4px 0 6px;
+  }
+  .ethan-quote{
+    font-family:Georgia,serif;
+    font-style:italic;
+    font-size:13px;
+    color:var(--ink-dim);
+    margin:0 0 10px;
+    line-height:1.4;
+  }
+  .ethan-bio{
+    font-size:12.5px;
+    color:var(--ink-dim);
+    line-height:1.6;
+    margin:0;
+    max-width:44ch;
+  }
+
+  /* ---------- benefit cards ---------- */
+  .benefits{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:16px;
+    margin:0 0 40px;
+  }
+  @media (max-width:560px){ .benefits{grid-template-columns:1fr;} }
+  .benefit{
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:18px 18px 16px;
+    position:relative;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+  .benefit:hover{
+    transform:translateY(-3px);
+    border-color:var(--profit-dim);
+  }
+  .benefit .tag{
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--profit);
+    margin-bottom:8px;
+    display:block;
+  }
+  .benefit h3{
+    margin:0 0 6px;
+    font-family:'Arial Black',sans-serif;
+    font-size:16px;
+    line-height:1.25;
+  }
+  .benefit p{
+    margin:0;
+    font-size:13px;
+    color:var(--ink-dim);
+    line-height:1.5;
+  }
+
+  .testimonial{
+    background:linear-gradient(135deg, rgba(40,240,160,0.06), rgba(255,207,92,0.03));
+    border:1px dashed var(--profit-dim);
+    border-radius:12px;
+    padding:20px 22px;
+    margin:0 0 30px;
+    font-family:Georgia,serif;
+    font-style:italic;
+    color:var(--ink);
+    font-size:15px;
+    max-width:60ch;
+  }
+  .testimonial cite{
+    display:block;
+    margin-top:10px;
+    font-style:normal;
+    font-family: 'Courier New', monospace;
+    font-size:12px;
+    color:var(--ink-faint);
+  }
+
+  .fine-print{
+    font-size:11px;
+    color:var(--ink-faint);
+    line-height:1.6;
+    max-width:70ch;
+    border-top:1px solid var(--line);
+    padding-top:16px;
+  }
+
+  /* ---------- right column: checkout ---------- */
+  .checkout-card{
+    background:var(--panel);
+    border:1px solid var(--profit-dim);
+    border-radius:16px;
+    padding:28px 26px;
+    box-shadow: 0 0 60px -20px rgba(40,240,160,0.25), 0 20px 50px -20px rgba(0,0,0,0.7);
+    position:sticky;
+    top:56px;
+  }
+  @media (max-width:980px){ .checkout-card{position:static;} }
+
+  .checkout-title{
+    font-family:'Arial Black',sans-serif;
+    font-size:24px;
+    text-transform:uppercase;
+    margin:0 0 4px;
+    background:linear-gradient(90deg, var(--gold), var(--profit));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .checkout-sub{
+    font-size:12px;
+    color:var(--ink-faint);
+    margin:0 0 22px;
+  }
+
+  .price-row{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    margin-bottom:6px;
+  }
+  .price-old{
+    font-size:20px;
+    color:var(--ink-faint);
+    text-decoration:line-through;
+    display:none;
+  }
+  .price-old.show{display:inline;}
+  .price-new{
+    font-family:'Arial Black',sans-serif;
+    font-size:44px;
+    color:var(--profit);
+    text-shadow:0 0 24px rgba(40,240,160,0.4);
+    transition: color 0.2s ease;
+  }
+  .price-unit{
+    font-size:12px;
+    color:var(--ink-faint);
+  }
+  .price-note{
+    font-size:11px;
+    color:var(--ink-faint);
+    margin-bottom:20px;
+  }
+
+  .discount-box{
+    display:flex;
+    gap:8px;
+    margin-bottom:8px;
+  }
+  input, select{
+    background:#050a08;
+    border:1px solid var(--line);
+    color:var(--ink);
+    border-radius:8px;
+    padding:11px 12px;
+    font-size:14px;
+    font-family:inherit;
+    width:100%;
+    outline:none;
+    transition:border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  input:focus{
+    border-color:var(--profit);
+    box-shadow:0 0 0 3px rgba(40,240,160,0.12);
+  }
+  .btn{
+    border:none;
+    border-radius:8px;
+    font-family:'Arial Black',sans-serif;
+    cursor:pointer;
+    transition: transform 0.1s ease, filter 0.15s ease;
+  }
+  .btn:active{transform:translateY(1px);}
+  .btn-apply{
+    background:var(--panel-2);
+    border:1px solid var(--profit-dim);
+    color:var(--profit);
+    padding:0 18px;
+    font-size:13px;
+    white-space:nowrap;
+  }
+  .btn-apply:hover{filter:brightness(1.2);}
+
+  .discount-msg{
+    font-size:12px;
+    min-height:18px;
+    margin:4px 0 18px;
+  }
+  .discount-msg.ok{color:var(--profit);}
+  .discount-msg.bad{color:var(--loss);}
+
+  .field{margin-bottom:14px;}
+  .field label{
+    display:block;
+    font-size:11px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    margin-bottom:6px;
+  }
+  .field-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+
+  .pay-btn{
+    width:100%;
+    padding:18px;
+    font-size:17px;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+    color:#052014;
+    background:linear-gradient(90deg, var(--gold), var(--profit));
+    box-shadow:0 10px 30px -8px rgba(40,240,160,0.5);
+    margin-top:6px;
+  }
+  .pay-btn:hover{filter:brightness(1.08);}
+
+  .lock-note{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    justify-content:center;
+    font-size:11px;
+    color:var(--ink-faint);
+    margin-top:12px;
+  }
+
+  .result-msg{
+    margin-top:10px;
+    font-size:12px;
+    line-height:1.6;
+    color:var(--loss);
+    min-height:0;
+    display:none;
+  }
+  .result-msg.show{display:block; animation: shake 0.4s ease;}
+  .result-msg em{
+    display:block;
+    margin-top:4px;
+    color:var(--loss);
+    opacity:0.85;
+  }
+  @keyframes shake{
+    0%,100%{transform:translateX(0);}
+    20%{transform:translateX(-4px);}
+    40%{transform:translateX(4px);}
+    60%{transform:translateX(-3px);}
+    80%{transform:translateX(3px);}
+  }
+
+  .checkout-footnote{
+    font-size:10px;
+    color:var(--ink-faint);
+    text-align:center;
+    margin-top:16px;
+    line-height:1.5;
+  }
+
+  ::selection{background:var(--profit); color:#031a12;}
+</style>
+</head>
+<body>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="up">MOON $412.88 ▲ 847.32%</span>
+    <span class="down">DOOM $2.14 ▼ 12.02%</span>
+    <span class="up">YOLO $19,204.00 ▲ 3120.5%</span>
+    <span class="up">RKTX $88.40 ▲ 240.1%</span>
+    <span class="down">SADR $0.44 ▼ 88.9%</span>
+    <span class="up">GAINZ $5,002.10 ▲ 501.0%</span>
+    <span class="up">TNDU $71.20 ▲ 122.4%</span>
+    <span class="down">BAGH $1.02 ▼ 40.0%</span>
+    <span class="up">MOON $412.88 ▲ 847.32%</span>
+    <span class="down">DOOM $2.14 ▼ 12.02%</span>
+    <span class="up">YOLO $19,204.00 ▲ 3120.5%</span>
+    <span class="up">RKTX $88.40 ▲ 240.1%</span>
+    <span class="down">SADR $0.44 ▼ 88.9%</span>
+    <span class="up">GAINZ $5,002.10 ▲ 501.0%</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ===================== LEFT: ADVERTISING ===================== -->
+  <div class="left">
+
+    <div class="eyebrow"><span class="dot"></span> LIVE COHORT ENROLLING NOW</div>
+
+    <h1 class="title display">The Ultimate Day<br>Trading Millionaire<br>Masterclass</h1>
+    <p class="subtitle">Learn the secrets the financial industry doesn't want you to know. (They really, really don't want you to know them. We checked.)</p>
+
+    <div class="stats-row">
+      <span><strong>47,392</strong> students already becoming millionaires</span>
+      <span class="stars">★★★★★ <span style="color:var(--ink-dim)">4.99/5</span></span>
+    </div>
+
+    <div class="ethan-card" id="ethanCard">
+      <div class="ethan-photo" id="ethanPhotoSlot">
+        <div class="ethan-placeholder" id="ethanPlaceholder">
+          <span class="ethan-emoji">🏎️</span>
+          <span class="ethan-placeholder-text">bugatti.jpg</span>
+        </div>
+        <img id="ethanImg" src="bugatti.jpg" alt="Ethan, standing near a very expensive car" style="display:none;">
+      </div>
+      <div class="ethan-copy">
+        <span class="ethan-eyebrow">Meet Your Instructor</span>
+        <h3 class="ethan-name">Hi, I'm Ethan.</h3>
+        <p class="ethan-quote">"I made over $20,000,000 day trading, and now I want to teach you."</p>
+        <p class="ethan-bio">I used be broke. Now I have a Bugatti and a strong opinion about candlesticks. Enroll below and let's get you a Bugatti too — or at least a very convincing photo near one.</p>
+      </div>
+    </div>
+
+    <div class="chart-panel">
+      <div class="floating-cards">
+        <div class="float-card"><span class="up">▲ +847.32%</span></div>
+        <div class="float-card two"><span style="color:var(--gold)">$1,284,392</span> portfolio*</div>
+        <div class="float-card three"><span class="up">RSI: "Rich Soon Index" 99</span></div>
+      </div>
+      <div class="chart-head">
+        <span class="sym">$RICH · Candlestick Matrix™</span>
+        <span class="price">$1,284,392.00</span>
+        <span class="delta">▲ 847.32%</span>
+      </div>
+      <svg class="chart-svg" viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg">
+        <!-- grid -->
+        <g stroke="#173229" stroke-width="1">
+          <line x1="0" y1="40" x2="560" y2="40"/>
+          <line x1="0" y1="90" x2="560" y2="90"/>
+          <line x1="0" y1="140" x2="560" y2="140"/>
+          <line x1="0" y1="190" x2="560" y2="190"/>
+        </g>
+        <!-- candlesticks -->
+        <g>
+          <line x1="20" y1="170" x2="20" y2="195" stroke="#ff4d5e" stroke-width="2"/>
+          <rect x="14" y="178" width="12" height="12" fill="#ff4d5e"/>
+
+          <line x1="45" y1="160" x2="45" y2="185" stroke="#28f0a0" stroke-width="2"/>
+          <rect x="39" y="165" width="12" height="14" fill="#28f0a0"/>
+
+          <line x1="70" y1="150" x2="70" y2="178" stroke="#ff4d5e" stroke-width="2"/>
+          <rect x="64" y="158" width="12" height="12" fill="#ff4d5e"/>
+
+          <line x1="95" y1="130" x2="95" y2="170" stroke="#28f0a0" stroke-width="2"/>
+          <rect x="89" y="138" width="12" height="20" fill="#28f0a0"/>
+
+          <line x1="120" y1="120" x2="120" y2="155" stroke="#28f0a0" stroke-width="2"/>
+          <rect x="114" y="126" width="12" height="18" fill="#28f0a0"/>
+
+          <line x1="145" y1="105" x2="145" y2="140" stroke="#ff4d5e" stroke-width="2"/>
+          <rect x="139" y="112" width="12" height="14" fill="#ff4d5e"/>
+
+          <line x1="170" y1="95" x2="170" y2="130" stroke="#28f0a0" stroke-width="2"/>
+          <rect x="164" y="100" width="12" height="18" fill="#28f0a0"/>
+
+          <line x1="195" y1="80" x2="195" y2="118" stroke="#28f0a0" stroke-width="2"/>
+          <rect x="189" y="86" width="12" height="20" fill="#28f0a0"/>
+
+          <line x1="220" y1="60" x2="220" y2="100" stroke="#28f0a0" stroke-width="2"/>
+          <rect x="214" y="66" width="12" height="22" fill="#28f0a0"/>
+
+          <line x1="245" y1="50" x2="245" y2="90" stroke="#ff4d5e" stroke-width="2"/>
+          <rect x="239" y="56" width="12" height="16" fill="#ff4d5e"/>
+
+          <line x1="270" y1="35" x2="270" y2="75" stroke="#28f0a0" stroke-width="2"/>
+          <rect x="264" y="40" width="12" height="22" fill="#28f0a0"/>
+        </g>
+        <!-- absurd upward line rocketing off the chart -->
+        <polyline class="glow-line" points="0,205 40,195 80,178 120,150 160,120 200,95 240,70 280,45 320,20 360,-5"
+          fill="none" stroke="#28f0a0" stroke-width="3" stroke-linecap="round"/>
+        <!-- little rocket riding the line -->
+        <text x="330" y="10" font-size="20">🚀</text>
+      </svg>
+      <div class="chart-caption">*Chart illustrative. Past absurdity does not guarantee future absurdity.</div>
+    </div>
+
+    <div class="copy-block">
+      <p>This course claims — loudly, confidently, and with zero peer-reviewed evidence — to teach you how to day trade, read charts like a caffeinated oracle, "predict" the market before it happens, and turn a small account into an ungodly fortune while you sleep, eat, and occasionally blink.</p>
+      <ul>
+        <li>Master reading candlestick charts by staring at them very intensely</li>
+        <li>"Predict" market moves using our exclusive Candlestick Matrix™</li>
+        <li>Turn a small account into millions, allegedly, theoretically, maybe</li>
+        <li>Achieve financial independence by Thursday (results not typical, or common, or verified)</li>
+      </ul>
+    </div>
+
+    <div class="benefits">
+      <div class="benefit">
+        <span class="tag">Wealth Engine</span>
+        <h3>Turn $500 into $1,000,000*</h3>
+        <p>Asterisk doing the heavy lifting since day one. Results assume perfect timing, infinite luck, and a market that has never once behaved like this.</p>
+      </div>
+      <div class="benefit">
+        <span class="tag">Proprietary Tech</span>
+        <h3>Master the Candlestick Matrix™</h3>
+        <p>A totally real, definitely trademarked system for staring at red and green rectangles until they start whispering stock tips.</p>
+      </div>
+      <div class="benefit">
+        <span class="tag">Lifestyle</span>
+        <h3>Wake Up, Check Charts, Become Rich</h3>
+        <p>A four-step morning routine. Step four is "become rich." We are still workshopping steps one through three.</p>
+      </div>
+      <div class="benefit">
+        <span class="tag">Peace of Mind</span>
+        <h3>100% Guaranteed*</h3>
+        <p>Guaranteed in the sense that the word appears on this page. See fine print for the sense in which it does not mean anything.</p>
+      </div>
+    </div>
+
+    <div class="testimonial">
+      "I watched the first 11 minutes and immediately understood the stock market."
+      <cite>— Definitely Real Student, Verified Purchase of This Sentence</cite>
+    </div>
+  </div>
+
+  <!-- ===================== RIGHT: FAKE CHECKOUT ===================== -->
+  <div class="right">
+    <div class="checkout-card">
+      <h2 class="checkout-title display">Become a Millionaire Today</h2>
+      <p class="checkout-sub">Instant access · No refunds, obviously · Wi-Fi not included</p>
+
+      <div class="price-row">
+        <span class="price-old" id="priceOld">$300</span>
+        <span class="price-new" id="priceNew">$300</span>
+        <span class="price-unit">one-time, allegedly</span>
+      </div>
+      <div class="price-note">Price locked in for the next 4,382 "limited-time" offers.</div>
+
+      <div class="field">
+        <label for="discountInput">Discount Code</label>
+        <div class="discount-box">
+          <input type="text" id="discountInput" placeholder="Enter code" autocomplete="off">
+          <button class="btn btn-apply" id="applyBtn">Apply</button>
+        </div>
+        <div class="discount-msg" id="discountMsg"></div>
+      </div>
+
+      <form id="checkoutForm" autocomplete="off">
+        <div class="field">
+          <label for="cardName">Cardholder Name</label>
+          <input type="text" id="cardName" placeholder="Future Millionaire">
+        </div>
+        <div class="field">
+          <label for="cardNumber">Card Number</label>
+          <input type="text" id="cardNumber" placeholder="•••• •••• •••• ••••" inputmode="numeric">
+        </div>
+        <div class="field field-row">
+          <div>
+            <label for="cardExp">Expiration Date</label>
+            <input type="text" id="cardExp" placeholder="MM / YY">
+          </div>
+          <div>
+            <label for="cardCvv">CVV</label>
+            <input type="text" id="cardCvv" placeholder="•••" inputmode="numeric">
+          </div>
+        </div>
+
+        <button type="submit" class="btn pay-btn" id="payBtn">Pay $300 — Get Rich</button>
+        <div class="result-msg" id="resultMsg"></div>
+      </form>
+
+      <div class="lock-note">🔒 Bank-grade encryption.</div>
+
+      <div class="checkout-footnote">
+        By clicking "Pay," you agree that the amount will be withdrawn from your account.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  (function(){
+    var VALID_CODE = "spanish4";
+    var discounted = false;
+
+    var priceOld = document.getElementById('priceOld');
+    var priceNew = document.getElementById('priceNew');
+    var discountMsg = document.getElementById('discountMsg');
+    var discountInput = document.getElementById('discountInput');
+    var applyBtn = document.getElementById('applyBtn');
+    var payBtn = document.getElementById('payBtn');
+    var form = document.getElementById('checkoutForm');
+    var resultMsg = document.getElementById('resultMsg');
+
+    function applyDiscount(){
+      var code = (discountInput.value || '').trim().toLowerCase();
+      if(code === VALID_CODE){
+        discounted = true;
+        priceOld.textContent = '$300';
+        priceOld.classList.add('show');
+        priceNew.textContent = '$200';
+        payBtn.textContent = 'Pay $200 — Get Rich';
+        discountMsg.textContent = 'Discount applied! You just saved $100.';
+        discountMsg.className = 'discount-msg ok';
+      } else {
+        discounted = false;
+        priceOld.classList.remove('show');
+        priceNew.textContent = '$300';
+        payBtn.textContent = 'Pay $300 — Get Rich';
+        if(code.length === 0){
+          discountMsg.textContent = 'Enter a discount code first, champ.';
+        } else {
+          discountMsg.textContent = 'Invalid discount code. Your wealth will have to wait.';
+        }
+        discountMsg.className = 'discount-msg bad';
+      }
+    }
+
+    // Ethan's photo loads from bugatti.jpg if it's sitting next to this HTML file.
+    var ethanImg = document.getElementById('ethanImg');
+    var ethanPlaceholder = document.getElementById('ethanPlaceholder');
+
+    // Show the photo once bugatti.jpg is actually present next to this file;
+    // until then, keep the placeholder visible instead of a broken image icon.
+    ethanImg.addEventListener('load', function(){
+      ethanImg.style.display = 'block';
+      ethanPlaceholder.style.display = 'none';
+    });
+    ethanImg.addEventListener('error', function(){
+      ethanImg.style.display = 'none';
+      ethanPlaceholder.style.display = 'flex';
+    });
+
+    applyBtn.addEventListener('click', applyDiscount);
+    discountInput.addEventListener('keydown', function(e){
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        applyDiscount();
+      }
+    });
+
+    function triggerFailure(){
+      // No data is read, sent, stored, or transmitted anywhere. Purely cosmetic failure theater.
+      resultMsg.innerHTML =
+        'Purchase failed. Please try again later.<br><br>';
+
+      // restart the shake animation reliably even on repeat clicks
+      resultMsg.classList.remove('show');
+      void resultMsg.offsetWidth; // force reflow
+      resultMsg.classList.add('show');
+
+      resultMsg.scrollIntoView({behavior:'smooth', block:'nearest'});
+      form.reset();
+    }
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      triggerFailure();
+      return false;
+    });
+  })();
+</script>
+
+</body>
+</html>
